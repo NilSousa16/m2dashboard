@@ -2,36 +2,17 @@ import styled from 'styled-components';
 
 export const Header = styled.header`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  margin-top: 20px;
 
-  a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #a8a8b3;
-    transition: color 0.2s;
-
-    &:hover {
-      color: #666;
-    }
-  }
-
-  svg {
-    margin-right: 4px;
-  }
-`;
-
-export const InfoHeader = styled.section`
-  display: flex;
-
-  margin-top: 60px;
-  margin-bottom: 40px;
-
-  header {
+  section {
     display: flex;
     align-items: center;
     width: 100%;
+
+    img {
+      width: 64px;
+      height: 64px;
+    }
 
     div {
       margin-left: 24px;
@@ -84,57 +65,53 @@ export const ContentTitle = styled.h5`
   color: #737380;
 `;
 
-export const Solutions = styled.div`
-  margin-top: 40px;
+export const Cards = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
   max-width: 1000px;
   min-height: 400px;
 
-  a {
-    background: #fff;
-    border-radius: 5px;
-    width: 100%;
-    padding: 24px;
-    display: block;
-    text-decoration: none;
+  justify-content: center;
+`;
 
+export const Card = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: #fff;
+  flex: 1 0 200px;
+  
+  border-radius: 5px;
+
+  transition: background-color 0.4s;
+
+  img {
+    width: 64px;
+    height: 64px;
+    margin-top: 20px;
+  }
+  
+  p {
     display: flex;
+    justify-content: center;
     align-items: center;
-    transition: transform 0.2s;
 
-    &:hover {
-      transform: translateX(10px);
-    }
+    font-size: 18px;
+    color: #a8a8b3;
+    margin-top: 4px;
+    padding: 0px;
+  }
 
-    & + a {
-      margin-top: 16px;
-    }
+  strong {
+    font-size: 20px;
+    color: #3d3d4d;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 
-    img {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-    }
-
-    div {
-      margin: 0 16px;
-      flex: 1;
-
-      strong {
-        font-size: 20px;
-        color: #3d3d4d;
-      }
-
-      p {
-        font-size: 18px;
-        color: #a8a8b3;
-        margin-top: 4px;
-      }
-    }
-
-    svg {
-      margin-left: auto;
-      color: #cbcbd6;
-    }
+  &:hover {
+    background-color: #69a0ac;
   }
 `;
 

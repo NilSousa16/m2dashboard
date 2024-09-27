@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 /** useMatch - possui as informações da requisição */
 import { useParams, Link } from 'react-router-dom';
-import { FiChevronLeft } from 'react-icons/fi';
 
 import { MdSensors, MdOutlineCatchingPokemon } from 'react-icons/md';
 
@@ -26,20 +25,22 @@ import { Line } from 'react-chartjs-2';
 
 import api from '../../services/api';
 
-import logoImg from '../../assets/logo.svg';
-
 import Map from '../../components/Map';
 
 import {
-  Header,
+  HeaderGoBack,
   Table,
   MapArea,
-  InfoHeader,
+  Header,
   Graphic,
   GridContent,
   ContentTitle,
   Footer,
 } from './styles';
+
+import { FiChevronLeft } from 'react-icons/fi';
+
+import smart_city from "../../assets/logo/smart_city.png";
 
 interface Gateway {
   mac: string;
@@ -47,11 +48,12 @@ interface Gateway {
   manufacturer: string;
   hostName: string;
   status: string;
-  date: PersonDate;
+  date: PersonalizedData;
+  solution: string;
 }
 
 interface GatewayStatus {
-  date: PersonDate;
+  date: PersonalizedData;
   baterryLevel: string;
   usedMemory: string;
   usedProcessor: string;
@@ -61,7 +63,7 @@ interface Device {
   id: string;
   location: string;
   description: string;
-  typeSensor: string;
+  typeDevice: string;
   status: boolean;
   gateway: {
     mac: string;
@@ -69,7 +71,7 @@ interface Device {
   category: string;
 }
 
-interface PersonDate {
+interface PersonalizedData {
   dayOfMonth: number;
   month: number;
   year: number;
@@ -115,7 +117,7 @@ const Gateway: React.FC = () => {
   const [gatewayDetails, setGatewayDetails] = useState<GatewayStatus[]>([]);
   const [gatewayInfo, setGatewayInfo] = useState<Gateway>();
   const [devices, setDevices] = useState<Device[]>([]);
-
+  
   useEffect(() => {
     api
       .get(`m2fot-status/fot-gateway-status/find?mac=${params.gateway}`)
@@ -147,6 +149,22 @@ const Gateway: React.FC = () => {
     return `${dataGateway.date.dayOfMonth}/${dataGateway.date.month}/${dataGateway.date.year}-${dataGateway.date.hourOfDay}:${dataGateway.date.minute}:${dataGateway.date.second}`;
   });
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+      }, 
+    },    
+    scales: {
+        x: {
+          ticks: {
+              display: false
+          }
+        }
+      }
+  };
+
   const data = {
     labels,
     datasets: [
@@ -169,23 +187,26 @@ const Gateway: React.FC = () => {
     ],
   };
 
+  console.log("Params: ", params);
+
   return (
     <>
-      <Header>
-        <img src={logoImg} alt="Github Explorer" />
-        <Link to="/">
+      <HeaderGoBack>
+        <Link to={`/dashboard/solution/${gatewayInfo?.solution}`}>
           <FiChevronLeft size={16} />
           Go Back
         </Link>
-      </Header>
+      </HeaderGoBack>
 
-      <InfoHeader>
-        <header>
+      <Header>
+        <section>
+          <img src={smart_city}/>
+
           <div>
             <strong>{gatewayInfo?.hostName}</strong>
             <p>{gatewayInfo?.ip}</p>
           </div>
-        </header>
+        </section>
         <ul>
           <li>
             <strong>{devices.length}</strong>
@@ -200,43 +221,7 @@ const Gateway: React.FC = () => {
             <span>Issues</span>
           </li>
         </ul>
-      </InfoHeader>
-
-      <ContentTitle>Performance</ContentTitle>
-
-      <Graphic>
-        <Line data={data} />
-      </Graphic>
-
-      <ContentTitle>Status Records</ContentTitle>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Table>
-          <DataGrid
-            getRowId={row =>
-              row.date.dayOfMonth +
-              row.date.month +
-              row.date.year +
-              row.date.hourOfDay +
-              row.date.minute +
-              row.date.second
-            }
-            rows={gatewayDetails}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        </Table>
-
-        <MapArea>
-          <Map />
-        </MapArea>
-      </div>
+      </Header>
 
       <ContentTitle>Connected Devices</ContentTitle>
 
@@ -278,7 +263,7 @@ const Gateway: React.FC = () => {
                     {device.id}
                   </Typography>
                   <Typography gutterBottom variant="body1" component="span">
-                    {device.typeSensor}
+                    {device.typeDevice}
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -286,6 +271,42 @@ const Gateway: React.FC = () => {
           </Link>
         ))}
       </GridContent>
+
+      <ContentTitle>Location</ContentTitle>
+      <MapArea>
+          <Map />
+      </MapArea>
+
+      <ContentTitle>Gateway Performance</ContentTitle>
+      <Graphic>
+        <Line options={options} data={data} />
+      </Graphic>
+
+      <ContentTitle>Status Records</ContentTitle>      
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Table>
+          <DataGrid
+            getRowId={row =>
+              row.date.dayOfMonth +
+              row.date.month +
+              row.date.year +
+              row.date.hourOfDay +
+              row.date.minute +
+              row.date.second
+            }
+            rows={gatewayDetails}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+          />
+        </Table>
+      </div>
 
       <Footer>
         <p>Developed by Wiser Research Group</p>

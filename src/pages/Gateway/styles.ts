@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
-export const Header = styled.header`
+export const HeaderGoBack = styled.header`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: right;
+  padding-bottom: 10px;
 
   a {
     display: flex;
@@ -16,22 +17,20 @@ export const Header = styled.header`
       color: #666;
     }
   }
-
-  svg {
-    margin-right: 4px;
-  }
 `;
 
-export const InfoHeader = styled.section`
+export const Header = styled.header`
   display: flex;
 
-  margin-top: 60px;
-  margin-bottom: 40px;
-
-  header {
+  section {
     display: flex;
     align-items: center;
     width: 100%;
+
+    img {
+      width: 64px;
+      height: 64px;
+    }
 
     div {
       margin-left: 24px;
@@ -93,14 +92,14 @@ export const Table = styled.div`
   display: block;
   height: 400px;
   background-color: #fff;
-  width: 60%;
+  width: 100%;
 `;
 
 export const MapArea = styled.div`
   display: block;
   height: 400px;
   background-color: #dcdcdc;
-  width: 37%;
+  width: 100%;
 `;
 
 export const GridContent = styled.div`

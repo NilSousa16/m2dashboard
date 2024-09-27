@@ -3,12 +3,11 @@ import React, { useEffect, useState } from 'react';
 /** useMatch - possui as informações da requisição */
 import { Link } from 'react-router-dom';
 
-import { FiChevronRight } from 'react-icons/fi';
 import api from '../../services/api';
 
-import logoImg from '../../assets/logo.svg';
+import { Header, ContentTitle, Footer, Cards, Card } from './styles';
 
-import { Header, InfoHeader, ContentTitle, Footer, Solutions } from './styles';
+import smart_city from "../../assets/logo/smart_city.png";
 
 interface Gateway {
   mac: string;
@@ -44,13 +43,13 @@ const Dashboard: React.FC = () => {
       .get('/m2fot-device/fot-device/')
       .then(response => setDevice(response.data));
   }, []);
-
-  // Search for existing solutions
-  // https://igluonline.com/como-remover-elementos-duplicados-de-uma-array-no-javascript-es6/
+  
   const solutionsWithRepetition = gateways.map(gateway => {
     return gateway.solution;
   });
+
   const solutionsWithoutRepetitionsTemp = new Set(solutionsWithRepetition);
+
   const solutionsWithoutRepetitions = [...solutionsWithoutRepetitionsTemp];
 
   // Total gateways by solution
@@ -86,18 +85,17 @@ const Dashboard: React.FC = () => {
   });
 
   return (
-    <>
+    <>      
       <Header>
-        <img src={logoImg} alt="Github Explorer" />
-      </Header>
-
-      <InfoHeader>
-        <header>
+        <section>
+          <img src={smart_city}/>
+              
           <div>
-            <strong>M2 - Smart Cities</strong>
+            <strong>M2 - Smart City</strong>
             <p>Smart Manager</p>
           </div>
-        </header>
+        </section>
+        
         <ul>
           <li>
             <strong>{solutionsWithoutRepetitions.length}</strong>
@@ -112,32 +110,47 @@ const Dashboard: React.FC = () => {
             <span>Devices</span>
           </li>
         </ul>
-      </InfoHeader>
+      </Header>
 
       <ContentTitle>Solutions</ContentTitle>
 
-      <Solutions>
+      <Cards>
         {solutionsWithoutRepetitions.map(solution => (
-          <Link key={solution} to={`/dashboard/solution/${solution}`}>
-            <div>
-              <strong>{solution}</strong>
+          <Link 
+            key={solution} 
+            to={`/dashboard/solution/${solution}`}
+            style={{ textDecoration: 'none' }} 
+          >
+            <Card>
+              <p>
+                <img src={`icons/${solution.replace(/ /g, "_")}.png`} />
+              </p>
+
+              <p>
+                <strong>
+                  {`${solution.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase())}`}
+                </strong>
+              </p>
+
               {devicesBySolutions.map(device =>
                 device.solution === solution ? (
-                  <p>{device.cont} Devices</p>
+                  <p>
+                    {device.cont} Devices
+                  </p>
                 ) : null,
               )}
 
               {gatewaysBySolutions.map(gateway =>
                 gateway.solution === solution ? (
-                  <p>{gateway.count} Gateways</p>
+                  <p>
+                    {gateway.count} Gateways
+                  </p>
                 ) : null,
               )}
-            </div>
-
-            <FiChevronRight size={20} />
+            </Card>
           </Link>
         ))}
-      </Solutions>
+      </Cards>
 
       <Footer>
         <p>Developed by Wiser Research Group</p>

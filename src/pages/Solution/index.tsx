@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 
 import { Link, useParams } from 'react-router-dom';
 import api from '../../services/api';
 
-import logoImg from '../../assets/logo.svg';
+import { HeaderGoBack, Header, ContentTitle, Cards, Card, Footer } from './styles';
 
-import { Solutions, Header, InfoHeader, Footer } from './styles';
+import { FiChevronLeft } from 'react-icons/fi';
+
+import smart_city from "../../assets/logo/smart_city.png";
+import gateway_logo from "../../assets/logo/gateway.png";
 
 interface Gateway {
   mac: string;
@@ -32,6 +34,7 @@ interface Device {
 
 const Solution: React.FC = () => {
   const params = useParams();
+  const nameSolution = `${params.solution}`;
 
   const [gateways, setGateways] = useState<Gateway[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
@@ -63,6 +66,7 @@ const Solution: React.FC = () => {
 
   let totalSensorSolution = 0;
   let totalActuadorSolution = 0;
+
   devices.map(device => {
     const category = device.category || '';
 
@@ -85,21 +89,24 @@ const Solution: React.FC = () => {
 
   return (
     <>
-      <Header>
-        <img src={logoImg} alt="Github Explorer" />
+      <HeaderGoBack>
         <Link to="/">
           <FiChevronLeft size={16} />
           Go Back
         </Link>
-      </Header>
-
-      <InfoHeader>
-        <header>
+      </HeaderGoBack>
+      
+      <Header>
+        <section>
+          <img src={smart_city} />
           <div>
-            <strong>{params.solution}</strong>
-            <p>Description</p>
+            <strong>
+              {`${nameSolution.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase())}`}
+            </strong>
+            <p>Solution</p>
           </div>
-        </header>
+        </section>
+
         <ul>
           <li>
             <strong>{totalGatewaysSolution}</strong>
@@ -114,24 +121,35 @@ const Solution: React.FC = () => {
             <span>Actuators</span>
           </li>
         </ul>
-      </InfoHeader>
+      </Header>
 
-      <Solutions>
+      <ContentTitle>Gateways</ContentTitle>
+
+      <Cards>
         {gateways.map(gateway =>
           params.solution === gateway.solution ? (
-            <Link key={gateway.mac} to={`/dashboard/gateway/${gateway.mac}`}>
-              <div>
-                <strong>{gateway.hostName}</strong>
+            <Link 
+              key={gateway.mac} 
+              to={`/dashboard/gateway/${gateway.mac}`}
+              style={{ textDecoration: 'none' } 
+            }>
+              <Card>
+                <p>
+                  <img src={gateway_logo} />
+                </p>
+                
+                <p>
+                  <strong>{gateway.hostName}</strong>
+                </p>
+
                 <p>{gateway.ip}</p>
                 <p>{gateway.manufacturer}</p>
                 <p>{gateway.status}</p>
-              </div>
-
-              <FiChevronRight size={20} />
+              </Card>
             </Link>
           ) : null,
         )}
-      </Solutions>
+      </Cards>
 
       <Footer>
         <p>Developed by Wiser Research Group</p>

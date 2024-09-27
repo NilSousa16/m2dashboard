@@ -9,13 +9,13 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 import api from '../../services/api';
 
-import logoImg from '../../assets/logo.svg';
-
 import Map from '../../components/Map';
 
+import smart_city from "../../assets/logo/smart_city.png";
+
 import {
+  HeaderGoBack,
   Header,
-  InfoHeader,
   ContentTitle,
   Table,
   MapArea,
@@ -29,7 +29,8 @@ interface Device {
   id: string;
   location: string;
   description: string;
-  typeSensor: string;
+  typeDevice: string;
+  category: string
   status: boolean;
   gateway: {
     mac: string;
@@ -93,8 +94,7 @@ const Device: React.FC = () => {
         setDeviceStatus(response.data);
       });
   }, [params.device]);
-
-  // https://www.freecodecamp.org/portuguese/news/tutorial-de-async-e-await-em-javascript-como-aguardar-que-uma-funcao-se-encerre-em-js/
+  
   setTimeout(
     () =>
       setSituation(
@@ -106,36 +106,54 @@ const Device: React.FC = () => {
 
   return (
     <>
-      <Header>
-        <img src={logoImg} alt="Github Explorer" />
+      <HeaderGoBack>
         <Link to={`/dashboard/gateway/${params.gateway}`}>
           <FiChevronLeft size={16} />
           Go Back
         </Link>
-      </Header>
+      </HeaderGoBack>
 
-      <InfoHeader>
-        <header>
+      <Header>
+        <section>
+          <img src={smart_city} />
           <div>
             <strong>{device?.description}</strong>
             <p>{device?.id}</p>
           </div>
-        </header>
+        </section>
         <ul>
           <li>
-            <strong>Actuator</strong>
-            <span>Device</span>
+            <strong>
+              {
+                `${
+                  device?.category.replace(/(^\w{1})|(\s+\w{1})/g, letra => 
+                    letra.toUpperCase())
+                }`
+              }
+            </strong>
+            <span>Category</span>
           </li>
           <li>
-            <strong>{device?.typeSensor}</strong>
+            <strong>
+              {
+                `${
+                  device?.typeDevice.replace(/(^\w{1})|(\s+\w{1})/g, letra => 
+                    letra.toUpperCase())
+                }`
+              }
+            </strong>
             <span>Type</span>
           </li>
           <li>
-            <strong>{situation}</strong>
+            <strong>
+              {
+                situation
+              }
+            </strong>
             <span>Status</span>
           </li>
         </ul>
-      </InfoHeader>
+      </Header>
 
       <ContentTitle>Log Device</ContentTitle>
       <div
