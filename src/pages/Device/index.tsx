@@ -27,13 +27,17 @@ import {
  */
 interface Device {
   id: string;
-  location: string;
+  location: { 
+    lat: string; 
+    lng: string 
+  };  
   description: string;
   typeDevice: string;
   category: string
   status: boolean;
   gateway: {
     mac: string;
+    solution: string;
   };
   date: CustomDate;
 }
@@ -182,7 +186,10 @@ const Device: React.FC = () => {
         </Table>
 
         <MapArea>
-          <Map />
+          <Map center={{ lat: -12.9704, lng: -38.5124 }} 
+            zoom={13} 
+            markers={[]}
+          /> 
         </MapArea>
       </div>
 

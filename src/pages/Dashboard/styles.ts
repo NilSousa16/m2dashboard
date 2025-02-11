@@ -74,6 +74,8 @@ export const Cards = styled.div`
   min-height: 400px;
 
   justify-content: center;
+  
+  margin-bottom: 40px;
 `;
 
 export const Card = styled.div`

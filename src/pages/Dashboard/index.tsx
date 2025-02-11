@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 /** useMatch - possui as informações da requisição */
 import { Link } from 'react-router-dom';
 
+import Map from '../../components/Map';
+
 import api from '../../services/api';
 
 import { Header, ContentTitle, Footer, Cards, Card } from './styles';
@@ -10,12 +12,17 @@ import { Header, ContentTitle, Footer, Cards, Card } from './styles';
 import smart_city from "../../assets/logo/smart_city.png";
 
 interface Gateway {
+  type: 'gateway';
   mac: string;
   ip: string;
   manufacturer: string;
   hostName: string;
   status: string;
   solution: string;
+  coordinates: {
+		latitude: string;
+    longitude: string;
+	}
 }
 
 interface Device {
@@ -48,6 +55,20 @@ const Dashboard: React.FC = () => {
     return gateway.solution;
   });
 
+ // Constrói os marcadores para o Map
+ const markers = gateways.map(gateway => ({
+  type: "gateway" as const,
+  mac: gateway.mac,
+  ip: gateway.ip,
+  manufacturer: gateway.manufacturer,
+  hostName: gateway.hostName,
+  status: gateway.status,
+  solution: gateway.solution,
+  coordinates: { 
+    latitude: String(gateway.coordinates.latitude), 
+    longitude: String(gateway.coordinates.longitude) },
+  }));
+
   const solutionsWithoutRepetitionsTemp = new Set(solutionsWithRepetition);
 
   const solutionsWithoutRepetitions = [...solutionsWithoutRepetitionsTemp];
@@ -71,6 +92,8 @@ const Dashboard: React.FC = () => {
   // Total devices
   const totalDevices = devices.length;
 
+  console.log();
+
   // Total devices by solution
   const devicesBySolutions = solutionsWithoutRepetitions.map(solution => {
     let cont = 0;
@@ -85,7 +108,7 @@ const Dashboard: React.FC = () => {
   });
 
   return (
-    <>      
+    <> 
       <Header>
         <section>
           <img src={smart_city}/>
@@ -112,7 +135,7 @@ const Dashboard: React.FC = () => {
         </ul>
       </Header>
 
-      <ContentTitle>Solutions</ContentTitle>
+      <ContentTitle>Dashboard</ContentTitle>
 
       <Cards>
         {solutionsWithoutRepetitions.map(solution => (
@@ -151,6 +174,11 @@ const Dashboard: React.FC = () => {
           </Link>
         ))}
       </Cards>
+
+      <Map center={{ lat: -12.9704, lng: -38.5124 }} 
+        zoom={13} 
+        markers={markers}
+      /> 
 
       <Footer>
         <p>Developed by Wiser Research Group</p>

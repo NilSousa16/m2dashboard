@@ -20,6 +20,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/styled-components": "^5.1.25",
     "@typescript-eslint/parser": "^5.23.0",
+    "@vis.gl/react-google-maps": "^1.5.1",
     "axios": "^0.27.2",
     "chart.js": "^3.8.2",
     "eslint-plugin-import": "^2.26.0",

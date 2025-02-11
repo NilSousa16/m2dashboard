@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
+
+import Map from '../../components/Map';
+
 import api from '../../services/api';
 
 import { HeaderGoBack, Header, ContentTitle, Cards, Card, Footer } from './styles';
@@ -17,6 +20,10 @@ interface Gateway {
   hostName: string;
   status: string;
   solution: string;
+  coordinates: {
+		latitude: string;
+    longitude: string;
+	}
 }
 
 interface Device {
@@ -54,6 +61,21 @@ const Solution: React.FC = () => {
     //   console.error(`Communication failure ${err}`);
     // })
   }, []);
+
+  const markers = gateways
+  .filter(gateway => gateway.solution === params.solution)
+  .map(gateway => ({
+    key: gateway.mac,
+    ip: gateway.ip,
+    manufacture: gateway.manufacturer,
+    hostname: gateway.hostName,
+    status: gateway.status,
+    solution: gateway.solution,
+    location: {
+      lat: Number(gateway.coordinates.latitude),
+      lng: Number(gateway.coordinates.longitude),
+    },
+  }));
 
   // Count gateways in solution
   let totalGatewaysSolution = 0;
@@ -124,6 +146,11 @@ const Solution: React.FC = () => {
       </Header>
 
       <ContentTitle>Gateways</ContentTitle>
+
+      <Map center={{ lat: -12.9704, lng: -38.5124 }} 
+        zoom={13} 
+        markers={[]}
+      /> 
 
       <Cards>
         {gateways.map(gateway =>

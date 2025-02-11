@@ -41,6 +41,7 @@ import {
 import { FiChevronLeft } from 'react-icons/fi';
 
 import smart_city from "../../assets/logo/smart_city.png";
+import { margin } from 'polished';
 
 interface Gateway {
   mac: string;
@@ -61,14 +62,18 @@ interface GatewayStatus {
 
 interface Device {
   id: string;
-  location: string;
+  coordinates: { 
+    latitute: string; 
+    longitute: string 
+  };  
   description: string;
   typeDevice: string;
+  category: string
   status: boolean;
   gateway: {
     mac: string;
+    solution: string;
   };
-  category: string;
 }
 
 interface PersonalizedData {
@@ -141,6 +146,24 @@ const Gateway: React.FC = () => {
         setDevices(response.data);
       });
   }, [params.gateway]);
+
+  const markers = devices
+    .map(device => ({
+      type: "device" as const,
+      id: device.id,
+      coordinates: { 
+        latitude: String(device.coordinates.latitute), 
+        longitude: String(device.coordinates.longitute),
+      },
+      description: device.description,
+      typeDevice: device.typeDevice,
+      category: device.category,
+      status: device.status,
+      gateway: {
+        mac: device.gateway.mac,
+        solution: device.gateway.solution,
+      },
+  }));
 
   /**
    * Graphic assembly
@@ -274,7 +297,14 @@ const Gateway: React.FC = () => {
 
       <ContentTitle>Location</ContentTitle>
       <MapArea>
-          <Map />
+      <MapArea>
+          <Map 
+            center={
+              { lat: -12.9704, lng: -38.5124 }} 
+            zoom={13} 
+            markers={[]}
+          /> 
+        </MapArea>
       </MapArea>
 
       <ContentTitle>Gateway Performance</ContentTitle>
