@@ -175,7 +175,7 @@ const Dashboard: React.FC = () => {
         ))}
       </Cards>
 
-      <Map center={{ lat: -12.9704, lng: -38.5124 }} 
+      <Map center={{ lat: -12.993149261359488, lng: -38.49283060302734 }} 
         zoom={13} 
         markers={markers}
       /> 

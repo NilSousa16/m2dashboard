@@ -303,7 +303,7 @@ const Gateway: React.FC = () => {
       <MapArea>
           <Map 
             center={
-              { lat: -12.9704, lng: -38.5124 }} 
+              { lat: -12.989194014215045, lng: -38.480299322509765 }} 
             zoom={13} 
             markers={markers}
           /> 

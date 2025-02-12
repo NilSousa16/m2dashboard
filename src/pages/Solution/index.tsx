@@ -147,7 +147,11 @@ const Solution: React.FC = () => {
 
       <ContentTitle>Gateways</ContentTitle>
 
-      <Map center={{ lat: -12.9704, lng: -38.5124 }} 
+      <Map 
+        center={{ 
+                    lat: -12.989194014215045, 
+                    lng: -38.480299322509765 
+                }} 
         zoom={13} 
         markers={markers}
       /> 
@@ -158,7 +162,7 @@ const Solution: React.FC = () => {
             <Link 
               key={gateway.mac} 
               to={`/dashboard/gateway/${gateway.mac}`}
-              style={{ textDecoration: 'none' } 
+              style={{ textDecoration: 'none', marginTop: '25px'} 
             }>
               <Card>
                 <p>
