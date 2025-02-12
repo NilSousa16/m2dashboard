@@ -26,10 +26,11 @@ import {
  * Interfaces
  */
 interface Device {
+  type: 'device';
   id: string;
-  location: { 
-    lat: string; 
-    lng: string 
+  coordinates: { 
+    latitude: string; 
+    longitude: string 
   };  
   description: string;
   typeDevice: string;
@@ -39,7 +40,7 @@ interface Device {
     mac: string;
     solution: string;
   };
-  date: CustomDate;
+  // date: CustomDate;
 }
 
 interface DeviceStatus {
@@ -70,11 +71,31 @@ const columns: GridColDef[] = [
     field: 'date',
     headerName: 'Date',
     width: 160,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.date.dayOfMonth}/${params.row.date.month}/${params.row.date.year} - ${params.row.date.hourOfDay}:${params.row.date.minute}:${params.row.date.second}`,
+    valueGetter: (params: GridValueGetterParams) => {
+      const day = String(params.row.date.dayOfMonth).padStart(2, '0');
+      const month = String(params.row.date.month).padStart(2, '0');
+      const year = String(params.row.date.year).slice(-2);
+      const hour = String(params.row.date.hourOfDay).padStart(2, '0');
+      const minute = String(params.row.date.minute).padStart(2, '0');
+      const second = String(params.row.date.second).padStart(2, '0');
+
+      return `${day}/${month}/${year} - ${hour}:${minute}:${second}`;
+    },
   },
   { field: 'situation', headerName: 'Situation', width: 130 },
-  { field: 'location', headerName: 'Location', width: 130 },
+  {
+    field: 'location',
+    headerName: 'Location',
+    width: 200,
+    valueGetter: (params: GridValueGetterParams) => {
+      if (!params.row.device || !params.row.device.coordinates) return 'N/A';
+      
+      const latitude = params.row.device.coordinates.latitude;
+      const longitude = params.row.device.coordinates.longitude;
+      
+      return `${latitude}, ${longitude}`;
+    },
+  },
   { field: 'gateway.id', headerName: 'Gateway', width: 130 },
 ];
 
@@ -107,6 +128,23 @@ const Device: React.FC = () => {
       ),
     0,
   );
+
+  const markers = device ? [{
+    type: "device" as const,
+    id: device.id,
+    coordinates: { 
+      latitude: String(device.coordinates.latitude), 
+      longitude: String(device.coordinates.longitude),
+    },
+    description: device.description,
+    typeDevice: device.typeDevice,
+    category: device.category,
+    status: device.status,
+    gateway: {
+      mac: device.gateway.mac,
+      solution: device.gateway.solution,
+    },
+  }] : [];
 
   return (
     <>
@@ -188,7 +226,7 @@ const Device: React.FC = () => {
         <MapArea>
           <Map center={{ lat: -12.9704, lng: -38.5124 }} 
             zoom={13} 
-            markers={[]}
+            markers={markers}
           /> 
         </MapArea>
       </div>

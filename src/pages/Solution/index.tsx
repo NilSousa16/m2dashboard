@@ -65,17 +65,17 @@ const Solution: React.FC = () => {
   const markers = gateways
   .filter(gateway => gateway.solution === params.solution)
   .map(gateway => ({
-    key: gateway.mac,
+    type: "gateway" as const,
+    mac: gateway.mac,
     ip: gateway.ip,
-    manufacture: gateway.manufacturer,
-    hostname: gateway.hostName,
+    manufacturer: gateway.manufacturer,
+    hostName: gateway.hostName,
     status: gateway.status,
     solution: gateway.solution,
-    location: {
-      lat: Number(gateway.coordinates.latitude),
-      lng: Number(gateway.coordinates.longitude),
-    },
-  }));
+    coordinates: { 
+      latitude: String(gateway.coordinates.latitude), 
+      longitude: String(gateway.coordinates.longitude) },
+    }));
 
   // Count gateways in solution
   let totalGatewaysSolution = 0;
@@ -149,7 +149,7 @@ const Solution: React.FC = () => {
 
       <Map center={{ lat: -12.9704, lng: -38.5124 }} 
         zoom={13} 
-        markers={[]}
+        markers={markers}
       /> 
 
       <Cards>

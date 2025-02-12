@@ -5,7 +5,6 @@ import Gateway from '../pages/Gateway';
 import Solution from '../pages/Solution';
 import Device from '../pages/Device';
 import Dashboard from '../pages/Dashboard';
-import PageTest from '../pages/_PageTest';
 
 const RoutesApp: React.FC = () => (
   <Routes>
@@ -16,7 +15,6 @@ const RoutesApp: React.FC = () => (
       path="/dashboard/gateway/:gateway/device/:device"
       element={<Device />}
     />
-    <Route path="/pagetest" element={<PageTest />} />
   </Routes>
 );
 

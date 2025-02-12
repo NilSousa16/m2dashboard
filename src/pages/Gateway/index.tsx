@@ -63,8 +63,8 @@ interface GatewayStatus {
 interface Device {
   id: string;
   coordinates: { 
-    latitute: string; 
-    longitute: string 
+    latitude: string; 
+    longitude: string 
   };  
   description: string;
   typeDevice: string;
@@ -147,14 +147,16 @@ const Gateway: React.FC = () => {
       });
   }, [params.gateway]);
 
-  const markers = devices
-    .map(device => ({
+  const markers = devices.map(device => {
+    const coordinates = { 
+      latitude: String(device.coordinates.latitude), 
+      longitude: String(device.coordinates.longitude),
+    };
+  
+    return {
       type: "device" as const,
       id: device.id,
-      coordinates: { 
-        latitude: String(device.coordinates.latitute), 
-        longitude: String(device.coordinates.longitute),
-      },
+      coordinates,
       description: device.description,
       typeDevice: device.typeDevice,
       category: device.category,
@@ -163,7 +165,8 @@ const Gateway: React.FC = () => {
         mac: device.gateway.mac,
         solution: device.gateway.solution,
       },
-  }));
+    };
+  })
 
   /**
    * Graphic assembly
@@ -302,7 +305,7 @@ const Gateway: React.FC = () => {
             center={
               { lat: -12.9704, lng: -38.5124 }} 
             zoom={13} 
-            markers={[]}
+            markers={markers}
           /> 
         </MapArea>
       </MapArea>

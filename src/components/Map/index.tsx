@@ -63,7 +63,9 @@ const App: React.FC<MapProps> = ({ center, zoom, markers }) => {
         }
         style={containerStyle}
       >
+        
         <PoiMarkers pois={markers} />
+        
       </Map>
     </APIProvider>
   );
